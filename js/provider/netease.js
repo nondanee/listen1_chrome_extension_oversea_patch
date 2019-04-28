@@ -241,7 +241,7 @@ function build_netease() {
       const { data: res_data } = response;
       const { url } = res_data.data[0];
       if (url != null) {
-        sound.url = url; // eslint-disable-line no-param-reassign
+        sound.url = url.replace(/(m\d+?)(?!c)\.music\.126\.net/, '$1c.music.126.net'); // eslint-disable-line no-param-reassign
         success();
       } else {
         failure();
