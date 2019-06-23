@@ -1,6 +1,6 @@
-Listen 1 (Chrome Extension) V2.2.0
+Listen 1 (Chrome Extension) V2.2.1
 ==========
-（Last Update 04/04/2019)
+（Last Update 06/23/2019)
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 
@@ -33,6 +33,9 @@ Install (Firefox)
 
 Changelog
 -------
+`2019-06-23`
+* fix connect to github.com error
+
 `2019-05-26`
 * fix kugou music can't play bug
 
