@@ -13,7 +13,10 @@
     <link href="css/angular-ui-notification.css" rel="stylesheet">
     <link href="css/hotkeys.css" rel="stylesheet">
     <link href="css/icon.css" rel="stylesheet">
-    <link href="css/iparanoid.css" rel="stylesheet">
+
+    <link href="css/origin.css" rel="stylesheet" id="theme">
+    <link href="css/common.css" rel="stylesheet">
+    
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script type="text/javascript" src="js/vendor/angular.min.js"></script>
     <script src="js/vendor/angular-translate.min.js"></script>
@@ -49,7 +52,7 @@
 
 <body >
     <div ng-controller="PlayController as playCtrl" ng-init="loadLocalSettings()">
-    <div ng-controller="TranslateController">
+    <div ng-controller="ProfileController">
     <div ng-controller="NavigationController">
     <div class="wrap">
         <!-- dialog-->
@@ -172,9 +175,9 @@
                       <span class="icon li-setting"></span>
                     </div>
                     <div ng-if="!isChrome && !isMac" class="window-control">
-                      <svg class="feather" window-control="window_min"><use xlink:href="images/feather-sprite.svg#minimize-2"></use></svg>
-                      <svg class="feather" window-control="window_max"><use xlink:href="images/feather-sprite.svg#maximize" ></use></svg>
-                      <svg class="feather" window-control="window_close"><use xlink:href="images/feather-sprite.svg#x"></use></svg>
+                      <svg class="icon" window-control="window_min"><use xlink:href="images/feather-sprite.svg#minimize-2"></use></svg>
+                      <svg class="icon" window-control="window_max"><use xlink:href="images/feather-sprite.svg#maximize" ></use></svg>
+                      <svg class="icon" window-control="window_close"><use xlink:href="images/feather-sprite.svg#x"></use></svg>
                     </div>
                 </div>
                 <div class="browser flex-scroll-wrapper" infinite-scroll="scrolling()" content-selector="'#playlist-content'">
@@ -270,6 +273,13 @@
                               <button class="language-button" ng-click="setLang('en_US')">English</button>
                             </div>
                           </div>
+                          <div class="settings-title"><span>{{_THEME}}<span></div>
+                          <div class="settings-content">
+                            <div>
+                              <button class="theme-button" ng-click="setTheme('white')">{{_THEME_WHITE}}</button>
+                              <button class="theme-button" ng-click="setTheme('black')">{{_THEME_BLACK}}</button>
+                            </div>
+                          </div>
                           <div class="settings-title"><span>{{_BACKUP_PLAYLIST}}<span></div>
                           <div class="settings-content">
                             <p>{{_BACKUP_WARNING}}</p>
@@ -328,7 +338,7 @@
                             <p> Listen 1 {{_HOMEPAGE}}: <a open-url="'http://listen1.github.io/listen1/'"> http://listen1.github.io/listen1/ </a> </p>
                             <p> Listen 1 {{_EMAIL}}: githublisten1@gmail.com </p>
                             <p> {{_DESIGNER}}: iparanoid </p>
-                            <p> {{_VERSION}}: 2.4.0 {{_LICENSE_NOTICE}}</p>
+                            <p> {{_VERSION}}: 2.5.0 {{_LICENSE_NOTICE}}</p>
                           </div>
                         </div>
                       </div>
@@ -342,22 +352,22 @@
                                 <div class="detail-head-title">
                                     <h2>{{ playlist_title }}</h2>
                                     <div class="playlist-button-list">
-                                        <div class="playlist-button playadd-button" ng-show="playlist_title!=''">
+                                        <div class="playlist-button playadd-button">
                                             <div class="play-list" ng-click="playMylist(list_id)"><span class="icon li-play-s"></span>
                                               {{_PLAY_ALL}}
                                             </div>
                                             <div class="add-list" ng-click="addMylist(list_id)"><span class="icon li-add"></span></div>
                                         </div>
-                                        <div class="playlist-button clone-button" ng-show="playlist_title!='' && !is_mine" ng-click="clonePlaylist(list_id)">
+                                        <div class="playlist-button clone-button" ng-show="!is_mine" ng-click="clonePlaylist(list_id)">
                                             <div class="play-list"><span class="icon li-songlist"></span><span>{{_ADD_TO_PLAYLIST}}</span></div>
                                         </div>
-                                        <div class="playlist-button edit-button" ng-show="playlist_title!='' && is_mine" ng-click="showDialog(3, {list_id: list_id, playlist_title: playlist_title, cover_img_url: cover_img_url})">
+                                        <div class="playlist-button edit-button" ng-show="is_mine" ng-click="showDialog(3, {list_id: list_id, playlist_title: playlist_title, cover_img_url: cover_img_url})">
                                             <div class="play-list"><svg class="feather"><use xlink:href="images/feather-sprite.svg#edit"></use></svg><span>{{_EDIT}}</span></div>
                                         </div>
-                                        <div class="playlist-button edit-button" ng-show="playlist_title!='' && !is_mine" open-url="playlist_source_url">
+                                        <div class="playlist-button edit-button" ng-show="!is_mine" open-url="playlist_source_url">
                                             <div class="play-list"><span class="icon li-link"></span><span>{{_ORIGIN_LINK}}</span></div>
                                         </div>
-                                        <div class="playlist-button edit-button" ng-show="playlist_title!='' && is_mine" ng-click="showDialog(6)">
+                                        <div class="playlist-button edit-button" ng-show="is_mine" ng-click="showDialog(6)">
                                             <div class="play-list"><svg class="feather"><use xlink:href="images/feather-sprite.svg#git-merge"></use></svg><span>{{_IMPORT}}</span></div>
                                         </div>
                                     </div>
@@ -386,12 +396,12 @@
                         </div>
                         <!-- now playing window-->
                         <div class="songdetail-wrapper" ng-show="window_type=='track'">
-                            <div class="close" ng-class="isMac? 'mac':'' "ng-click="popWindow()"><svg class="feather"><use xlink:href="images/feather-sprite.svg#chevron-down"></use></svg></div>
+                            <div class="close" ng-class="isMac? 'mac':'' "ng-click="popWindow()"><svg class="icon"><use xlink:href="images/feather-sprite.svg#chevron-down"></use></svg></div>
 
                             <div ng-if="!isChrome && !isMac" class="window-control">
-                              <svg class="feather" window-control="window_min"><use xlink:href="images/feather-sprite.svg#minimize-2"></use></svg>
-                              <svg class="feather" window-control="window_max"><use xlink:href="images/feather-sprite.svg#maximize" ></use></svg>
-                              <svg class="feather" window-control="window_close"><use xlink:href="images/feather-sprite.svg#x"></use></svg>
+                              <svg class="icon" window-control="window_min"><use xlink:href="images/feather-sprite.svg#minimize-2"></use></svg>
+                              <svg class="icon" window-control="window_max"><use xlink:href="images/feather-sprite.svg#maximize" ></use></svg>
+                              <svg class="icon" window-control="window_close"><use xlink:href="images/feather-sprite.svg#x"></use></svg>
                             </div>
 
                             <div class="playsong-detail">
