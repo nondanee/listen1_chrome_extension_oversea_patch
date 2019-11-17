@@ -6616,6 +6616,19 @@ ngSoundManager.factory('angularPlayer', ['$rootScope', '$log',
                     isPlaying = true;
                     $rootScope.$broadcast('music:isPlaying', isPlaying);
                 }
+                var track = this.getTrack(trackId), player = this;
+                if ('mediaSession' in navigator && track) {
+                    navigator.mediaSession.metadata = new MediaMetadata({
+                        title: track.title,
+                        artist: track.artist,
+                        album: track.album,
+                        artwork: [{src: track.img_url, sizes: '200x200', type: 'image/jpeg'}]
+                    })
+                    navigator.mediaSession.setActionHandler('play', function(){player.play()})
+                    navigator.mediaSession.setActionHandler('pause', function(){player.pause()})
+                    navigator.mediaSession.setActionHandler('previoustrack', function(){player.prevTrack()})
+                    navigator.mediaSession.setActionHandler('nexttrack', function(){player.nextTrack()})
+                }
             },
             play: function() {
                 var trackToPlay = null;
